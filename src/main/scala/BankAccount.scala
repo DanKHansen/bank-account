@@ -7,17 +7,16 @@ object Bank:
    def openAccount(): BankAccount = new BankAccount:
       private var bal: Int = 0
       private var isOpen: Boolean = true
-      private val lock = new Object
 
-      override def closeAccount(): Unit = lock.synchronized {
+      override def closeAccount(): Unit = this.synchronized {
          isOpen = false
       }
 
-      override def getBalance: Option[Int] = lock.synchronized {
+      override def getBalance: Option[Int] = this.synchronized {
          if isOpen then Some(bal) else None
       }
 
-      override def incrementBalance(increment: Int): Option[Int] = lock.synchronized {
+      override def incrementBalance(increment: Int): Option[Int] = this.synchronized {
          if isOpen then
             bal += increment
             Some(bal)
