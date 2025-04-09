@@ -4,15 +4,12 @@ trait BankAccount:
    def incrementBalance(increment: Int): Option[Int]
 
 object Bank:
-   def openAccount(): BankAccount = new BankAccount:
-      private var (bal, isOpen): (Int, Boolean) = (0, true)
+   def openAccount(): BankAccount = new BankAccount():
+      private var bal: Option[Int] = Some(0)
+      override def closeAccount(): Unit = bal = None
 
-      override def closeAccount(): Unit = this.synchronized { isOpen = false }
+      override def getBalance: Option[Int] = bal
 
-      override def getBalance: Option[Int] = this.synchronized { if isOpen then Some(bal) else None }
-
-      override def incrementBalance(increment: Int): Option[Int] = this.synchronized:
-         if isOpen then
-            bal += increment
-            Some(bal)
-         else None
+      override def incrementBalance(increment: Int): Option[Int] = synchronized:
+         bal = bal.map(_ + increment)
+         bal
