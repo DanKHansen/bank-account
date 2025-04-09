@@ -5,8 +5,7 @@ trait BankAccount:
 
 object Bank:
    def openAccount(): BankAccount = new BankAccount:
-      private var bal: Int = 0
-      private var isOpen: Boolean = true
+      private var (bal, isOpen): (Int, Boolean) = (0, true)
 
       override def closeAccount(): Unit = this.synchronized {
          isOpen = false
